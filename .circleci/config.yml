@@ -1,0 +1,9 @@
+orbs:
+  aws-ecr: circleci/aws-ecr@6.2.0
+version: 2.1
+workflows:
+  build_and_push_image:
+    jobs:
+      - aws-ecr/build-and-push-image:
+          repo: gitops-sample
+          tag: 0.0.1
