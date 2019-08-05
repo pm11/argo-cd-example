@@ -28,8 +28,7 @@ jobs:
             git config --global user.name "pm11"
             git config --global user.email "shinichiro.tdk+github@gmail.com"
             git checkout --no-track -b ${BRANCH}
-            git commit -m 'bump version'
-            git add infra/default/application.yaml
+            git commit -am 'bump version'
             hub push origin ${BRANCH}
             hub pull-request --message="test" --base=${CIRCLE_PROJECT_USERNAME}:${BRANCH} --head=${CIRCLE_PROJECT_USERNAME}:master
 
