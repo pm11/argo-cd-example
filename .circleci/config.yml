@@ -23,14 +23,15 @@ jobs:
       - run:
           name: Create a pull request
           command: |
+            cd /home/circleci/project
+            export $BRANCH=`date "+%Y%m%d-%H%M%S"`
             git config --global user.name "pm11"
             git config --global user.email "shinichiro.tdk+github@gmail.com"
-            git checkout --no-track -b sample
-            git commit -m 'sample'
+            git checkout --no-track -b ${BRANCH}
+            git commit -m 'bump version'
             git add infra/default/application.yaml
-            hub push origin sample
-            cd /home/circleci/project
-            hub pull-request --message="test" --base=${CIRCLE_PROJECT_USERNAME}:sample --head=${CIRCLE_PROJECT_USERNAME}:master
+            hub push origin ${BRANCH}
+            hub pull-request --message="test" --base=${CIRCLE_PROJECT_USERNAME}:${BRANCH} --head=${CIRCLE_PROJECT_USERNAME}:master
 
 workflows:
   build_and_push_image:
