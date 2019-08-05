@@ -1,5 +1,7 @@
 FROM nginx:1.17.2
 
-ADD index.html /etc/nginx/sites-available
+ADD index.html /usr/share/nginx/html/
 
-CMD ["nginx"]
+EXPOSE 80
+
+CMD nginx -g "daemon off;"
