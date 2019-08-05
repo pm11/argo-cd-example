@@ -14,14 +14,22 @@ jobs:
           command: |
             curl -sSLf https://github.com/github/hub/releases/download/v2.12.3/hub-linux-amd64-2.12.3.tgz | \
             tar zxf - --strip-components=1 -C /tmp/ && \
-            mv /tmp/bin/hub /usr/local/bin/hub
+            sudo mv /tmp/bin/hub /usr/local/bin/hub
       - run:
           name: Replace image definition
           command: |
+            cd ${CIRCLE_WORKING_DIRECTORY}
             sed -i -e 's/\(gitops-sample:\)[0-9\.]\+.*$/\10.0.2/g' infra/default/application.yaml
       - run:
           name: Create a pull request
           command: |
+            git config --global user.name "pm11"
+            git config --global user.email "shinichiro.tdk+github@gmail.com"
+            git checkout --no-track -b sample
+            git commit -m 'sample'
+            git add infra/default/application.yaml
+            hub push origin sample
+            cd ${CIRCLE_WORKING_DIRECTORY}
             hub pull-request --message="test" --base=${CIRCLE_PROJECT_USERNAME}:sample --head=${CIRCLE_PROJECT_USERNAME}:master
 
 workflows:
