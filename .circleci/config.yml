@@ -17,7 +17,7 @@ jobs:
           name: Replace definition & create a pull request
           command: |
             cd /home/circleci/project
-            sed -i -e 's/\(gitops-sample:\)[0-9\.]\+.*$/\10.0.3/g' infra/default/application.yaml
+            sed -i -e 's/\(gitops-sample:\)[0-9\.]\+.*$/\11.0.1/g' infra/default/application.yaml
             export BRANCH=`date "+%Y%m%d-%H%M%S"`
             git config --global user.email "cibot@example.com"
             git config --global user.name "CIBot"
@@ -34,7 +34,7 @@ workflows:
     jobs:
       - aws-ecr/build-and-push-image:
           repo: gitops-sample
-          tag: 0.0.3
+          tag: 1.0.1
           filters:
             branches:
               only:
