@@ -14,14 +14,10 @@ jobs:
             tar zxf - --strip-components=1 -C /tmp/ && \
             sudo mv /tmp/bin/hub /usr/local/bin/hub
       - run:
-          name: Replace image definition
+          name: Replace definition & create a pull request
           command: |
             cd /home/circleci/project
             sed -i -e 's/\(gitops-sample:\)[0-9\.]\+.*$/\10.0.3/g' infra/default/application.yaml
-      - run:
-          name: Create a pull request
-          command: |
-            cd /home/circleci/project
             export BRANCH=`date "+%Y%m%d-%H%M%S"`
             git config --global user.email "cibot@example.com"
             git config --global user.name "CIBot"
