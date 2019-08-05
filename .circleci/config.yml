@@ -24,7 +24,7 @@ jobs:
           name: Create a pull request
           command: |
             cd /home/circleci/project
-            export $BRANCH=`date "+%Y%m%d-%H%M%S"`
+            export BRANCH=`date "+%Y%m%d-%H%M%S"`
             git config --global user.name "pm11"
             git config --global user.email "shinichiro.tdk+github@gmail.com"
             git checkout --no-track -b ${BRANCH}
