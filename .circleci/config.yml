@@ -1,9 +1,48 @@
 orbs:
   aws-ecr: circleci/aws-ecr@6.2.0
 version: 2.1
+jobs:
+  create_pull_request:
+    docker:
+        - image: circleci/golang:1.11-stretch
+    steps:
+      - checkout
+      - run:
+          name: Install hub command
+          command: |
+            curl -sSLf https://github.com/github/hub/releases/download/v2.12.3/hub-linux-amd64-2.12.3.tgz | \
+            tar zxf - --strip-components=1 -C /tmp/ && \
+            sudo mv /tmp/bin/hub /usr/local/bin/hub
+      - run:
+          name: Replace definition & create a pull request
+          command: |
+            cd /home/circleci/project
+            sed -i -e 's/\(gitops-sample:\)[0-9\.]\+.*$/\11.0.0/g' infra/default/application.yaml
+            export BRANCH=`date "+%Y%m%d-%H%M%S"`
+            git config --global user.email "cibot@example.com"
+            git config --global user.name "CIBot"
+            git checkout --no-track -b ${BRANCH}
+            git commit -am '[ci skip] bump version'
+            hub push origin ${BRANCH}
+            hub pull-request \
+              --message="Update Image" \
+              --base=${CIRCLE_PROJECT_USERNAME}:master \
+              --head=${CIRCLE_PROJECT_USERNAME}:${BRANCH}
+
 workflows:
   build_and_push_image:
     jobs:
       - aws-ecr/build-and-push-image:
           repo: gitops-sample
-          tag: 0.0.1
+          tag: 1.0.0
+          filters:
+            branches:
+              only:
+                - master
+      - create_pull_request:
+          requires:
+            - aws-ecr/build-and-push-image
+          filters:
+            branches:
+              only:
+                - master
