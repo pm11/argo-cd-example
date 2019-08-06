@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: AWS_ACCOUNT_ID.dkr.ecr.us-west-2.amazonaws.com/gitops-sample:0.0.1
+        image: AWS_ACCOUNT_ID.dkr.ecr.us-west-2.amazonaws.com/gitops-sample:1.0.0
         imagePullPolicy: Always
         ports:
         - containerPort: 80
